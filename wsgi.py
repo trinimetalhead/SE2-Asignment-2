@@ -35,8 +35,15 @@ user_cli = AppGroup('user', help='User object commands')
 @click.argument("first_name", default="Rob")
 @click.argument("last_name", default="Smith")
 @click.argument("role", default="student")
-def create_user_command(username, password, first_name, last_name, role):
-    create_user(username, password, first_name, last_name, role)
+@click.argument("extra", default='') # for any extra info like major, position, company
+def create_user_command(username, password, first_name, last_name, role, extra):
+    if role == 'student':
+        create_user(username, password, first_name, last_name, role, major=extra)
+    elif role == 'staff':
+        create_user(username, password, first_name, last_name, role, position=extra)
+    elif role == 'employer':
+        create_user(username, password, first_name, last_name, role, company=extra)
+    
     print(f'{username} created with the role of {role}!')
 
 # this command will be : flask user create bob bobpass
@@ -50,6 +57,33 @@ def list_user_command(format):
         print(get_all_users_json())
 
 app.cli.add_command(user_cli) # add the group to the cli
+
+@user_cli.command("list-staff", help="Lists all staff users in the database")
+def list_staff_command():
+    staff = [user for user in get_all_users() if user.role == 'staff']
+    if not staff:
+        print("No staff users found.")
+        return
+    for user in staff:
+        print(f"ID: {user.id}, Username: {user.username}, Name: {user.first_name} {user.last_name}, Position: {user.staff_profile.position}")
+
+@user_cli.command("list-employers", help="Lists all employer users in the database")
+def list_employers_command():
+    employers = [user for user in get_all_users() if user.role == 'employer']
+    if not employers:
+        print("No employer users found.")
+        return
+    for user in employers:
+        print(f"ID: {user.id}, Username: {user.username}, Name: {user.first_name} {user.last_name}, Company: {user.employer_profile.company}")
+
+@user_cli.command("list-students", help="Lists all student users in the database")
+def list_students_command():
+    students = [user for user in get_all_users() if user.role == 'student']
+    if not students:
+        print("No student users found.")
+        return
+    for user in students:
+        print(f"ID: {user.id}, Username: {user.username}, Name: {user.first_name} {user.last_name}, Major: {user.student_profile.major}")
 
 '''
 Test Commands
