@@ -2,10 +2,11 @@ from App.database import db
 
 class InternshipPosition(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    employer_id = db.Column(db.Integer, db.ForeignKey('employer.id'), nullable=False)
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
     requirements = db.Column(db.Text, nullable=True)
-    employer_id = db.Column(db.Integer, db.ForeignKey('employer.id'), nullable=False)
+    
 
     #relationship to shortlist 
     shortlists = db.relationship('Shortlist', backref='internship_position', lazy=True, cascade='all, delete-orphan')

@@ -4,7 +4,8 @@ from flask.cli import with_appcontext, AppGroup
 from App.database import db, get_migrate
 from App.models import User
 from App.main import create_app
-from App.controllers import ( create_user, get_all_users_json, get_all_users, initialize, create_internship_position)
+from App.controllers import ( create_user, get_all_users_json, get_all_users, initialize, create_internship_position,
+                             get_internships_by_employer)
 
 
 # This commands file allow you to create convenient CLI commands for testing controllers
@@ -112,17 +113,39 @@ Employer Commands
 employer_cli = AppGroup('employer', help='Employer commands') 
 
 @employer_cli.command("create-position", help="Creates an internship position")
+@click.argument("employer_id")
 @click.argument("title", default="Intern")
 @click.argument("description", default="Internship position description")
 @click.argument("requirements", default="3.0 GPA or Above")
-@click.argument("employer_id")
-def create_position(title, description, requirements, employer_id):
-    positions = create_internship_position(title,description,requirements, employer_id)
+def create_position(employer_id, title, description, requirements):
+    positions = create_internship_position(employer_id,title,description,requirements)
     print(f"position {positions.title} created with id {positions.id}")
 
-
+@employer_cli.command("list-positions", help="Lists all internship positions for an employer")
+@click.argument("employer_id")
+def list_positions(employer_id):
+    positions = get_internships_by_employer(employer_id)
+    if not positions:
+        print("No positions found for this employer.")
+        return
+    for position in positions:
+        print(f"ID: {position.id}, Title: {position.title}, Description: {position.description}, Requirements: {position.requirements}")
 
 
 app.cli.add_command(employer_cli) # add the group to the cli
+
+
+'''
+Staff Commands
+'''
+
+staff_cli = AppGroup('staff', help='staff commands') 
+
+
+
+
+
+app.cli.add_command(staff_cli) # add the group to the cli
+
 
 
