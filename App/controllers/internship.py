@@ -1,5 +1,5 @@
-from App.models import db, InternshipPosition, Shortlist, Student, Employer
-
+from App.models import InternshipPosition, Shortlist, Student, Employer
+from App.database import db
 def create_internship_position(title, description, requirements, employer_id):
     #check if employer exisits
     employer = Employer.query.get(employer_id)
