@@ -13,5 +13,29 @@ class Shortlist(db.Model):
     __table_args__ = (db.UniqueConstraint('position_id', 'student_id', name='_position_student_uc'),)
 
 
+    def __init__(self, position_id, student_id):
+        self.position_id = position_id
+        self.student_id = student_id
+          
+    def get_json(self):
+        return {
+            'id': self.id,
+            'position_id': self.position_id,
+            'student_id': self.student_id,
+            'status': self.status,
+            'date_added': self.date_added.isoformat()
+        }
+
     def __repr__(self):
         return f'<Shortlist {self.id} - Position: {self.position_id}, Student: {self.student_id}, Status: {self.status}>'
+    
+
+    def accept(self):
+        self.status = 'accepted'
+        db.session.commit()
+    
+    def reject(self):
+        self.status = 'rejected'
+        db.session.commit()
+
+        
