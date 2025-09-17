@@ -2,7 +2,7 @@ import click, pytest, sys
 from flask.cli import with_appcontext, AppGroup
 
 from App.database import db, get_migrate
-from App.models import User
+from App.models import User, internship_position, Shortlist 
 from App.main import create_app
 from App.controllers import ( create_user, get_all_users_json, get_all_users, initialize, create_internship_position,
                              get_internships_by_employer)
@@ -12,6 +12,7 @@ from App.controllers import ( create_user, get_all_users_json, get_all_users, in
 
 app = create_app()
 migrate = get_migrate(app)
+
 
 # This command creates and initializes the database
 @app.cli.command("init", help="Creates and initializes the database")
