@@ -4,7 +4,7 @@ from flask.cli import with_appcontext, AppGroup
 from App.database import db, get_migrate
 from App.models import User, internship_position, Shortlist 
 from App.main import create_app
-from App.controllers import ( create_user, get_all_users_json, get_all_users, initialize, create_internship_position,
+from App.controllers import ( create_employer,create_staff, create_student , get_all_users_json, get_all_users, initialize, create_internship_position,
                              get_internships_by_employer)
 
 
@@ -29,26 +29,47 @@ User Commands
 # create a group, it would be the first argument of the comand
 # eg : flask user <command>
 user_cli = AppGroup('user', help='User object commands') 
-
 # Then define the command and any parameters and annotate it with the group (@)
-@user_cli.command("create", help="Creates a user")
-@click.argument("username", default="rob")
-@click.argument("password", default="robpass")
-@click.argument("first_name", default="Rob")
-@click.argument("last_name", default="Smith")
-@click.argument("role", default="student")
-@click.argument("extra", default='') # for any extra info like major, position, company
-def create_user_command(username, password, first_name, last_name, role, extra):
-    if role == 'student':
-        create_user(username, password, first_name, last_name, role, major=extra)
-    elif role == 'staff':
-        create_user(username, password, first_name, last_name, role, position=extra)
-    elif role == 'employer':
-        create_user(username, password, first_name, last_name, role, company=extra)
-    
-    print(f'{username} created with the role of {role}!')
 
-# this command will be : flask user create bob bobpass
+
+@user_cli.command("create-student", help="Creates a student user")
+@click.argument("username", default="alice")
+@click.argument("password", default="alicepass")
+@click.argument("first_name", default="Alice")
+@click.argument("last_name", default="Johnson")
+@click.argument("major", default="Computer Science")
+def create_student_command(username, password, first_name, last_name, major):
+    try:
+        create_student(username, password, first_name, last_name, major)
+        print(f'Student {username} created!')
+    except ValueError as e:
+        print(F"error: {e}")
+
+@user_cli.command("create-staff", help="Creates a staff user")
+@click.argument("username", default="john")
+@click.argument("password", default="johnpass")
+@click.argument("first_name", default="John")
+@click.argument("last_name", default="Doe")
+@click.argument("position", default="Lecturer")
+def create_staff_command(username,password,first_name,last_name,position):
+    try:
+        create_staff(username,password,first_name,last_name,position)
+        print(f'Staff {username} created!')
+    except ValueError as e:
+        print(F"error: {e}")
+
+@user_cli.command("create-employer", help="Creates an employer user")
+@click.argument("username", default="emily")
+@click.argument("password", default="emilypass")
+@click.argument("first_name", default="Emily")
+@click.argument("last_name", default="Davis")
+@click.argument("company", default="Tech Corp")
+def create_employer_command(username,password,first_name,last_name,company):
+    try:
+        create_employer(username,password,first_name,last_name,company)
+        print(f'Employer {username} created!')
+    except ValueError as e:
+        print(F"error: {e}")
 
 @user_cli.command("list", help="Lists users in the database")
 @click.argument("format", default="string")

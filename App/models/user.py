@@ -1,5 +1,6 @@
 from werkzeug.security import check_password_hash, generate_password_hash
 from App.database import db
+from App.models.shortlist import Shortlist
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -9,21 +10,31 @@ class User(db.Model):
     last_name = db.Column(db.String(20), nullable=False)
     role = db.Column(db.String(20), nullable=False, default='student') #student, staff or employer
 
-    #relationships 
-    student_profile = db.relationship('Student', backref='user', uselist=False, cascade='all, delete-orphan')
-    staff_profile = db.relationship('Staff', backref='user', uselist=False, cascade='all, delete-orphan')
-    employer_profile = db.relationship('Employer', backref='user', uselist=False, cascade='all, delete-orphan')
 
-    def __init__(self, username, password, first_name, last_name, role):
+    student_shortlists = db.relationship('Shortlist',foreign_keys=Shortlist.student_id, backref='student', lazy=True, cascade='all, delete-orphan')
+    staff_shortlists = db.relationship('Shortlist',foreign_keys=Shortlist.staff_id, backref='staff', lazy=True)
+    
+    #mapper args for polymorphic inheritance
+    __mapper_args__ = {
+        'polymorphic_identity': 'user',
+        'polymorphic_on': role
+    }
+
+    #relationships 
+    #student_profile = db.relationship('Student', backref='user', uselist=False, cascade='all, delete-orphan')
+    #staff_profile = db.relationship('Staff', backref='user', uselist=False, cascade='all, delete-orphan')
+    #employer_profile = db.relationship('Employer', backref='user', uselist=False, cascade='all, delete-orphan')
+
+    def __init__(self, username, password, first_name, last_name):
         self.username = username
         self.set_password(password)
         self.first_name = first_name
         self.last_name = last_name
-        self.role = role
+        
 
         # validate role 
-        if role not in ['student', 'staff', 'employer']:
-            raise ValueError("Role must be 'student', 'staff', or 'employer'")
+        #if role not in ['student', 'staff', 'employer']:
+        #    raise ValueError("Role must be 'student', 'staff', or 'employer'")
 
     def get_json(self):
         return{

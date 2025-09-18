@@ -1,27 +1,28 @@
 from App.database import db 
+from App.models.user import User
 
-class Student(db.Model):
+class Student(User):
     __tablename__ = 'students'
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    major = db.Column(db.String(50), nullable=False)
+    
+    id = db.Column(db.Integer, db.ForeignKey('user.id'),primary_key=True, nullable=False)
+    major = db.Column(db.String(50), nullable=False, default='Undeclared')
 
-    #shortlist relationship
-    shortlists = db.relationship('Shortlist', backref='student',lazy=True, cascade='all, delete-orphan')
+    __mapper_args__={
+        'polymorphic_identity':'student',
+    }
 
-    def _init__(self, user_id, major):
-        self.user_id = user_id
+    def __init__(self, username, password, first_name, last_name, major = 'Undeclared'):
+        super().__init__(username, password, first_name, last_name)
+        self.role = 'student'
         self.major = major
 
-    def __repr__(self):
-        return f'<Student {self.id} - {self.user.first_name} {self.user.last_name}, Major: {self.major}>'
+    #def __repr__(self):
+    #    return f'<Student {self.id} - {self.user.first_name} {self.user.last_name}, Major: {self.major}>'
 
     def get_json(self):
-        return {
-            'id': self.id,
-            'user_id': self.user_id,
-            'major': self.major
-        }
+        base_json = super().get_json()
+        base_json['major'] = self.major
+        return base_json
 
     def get_full_name(self):
         return f'{self.user.first_name} {self.user.last_name}'

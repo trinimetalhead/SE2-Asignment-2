@@ -6,14 +6,16 @@ class Shortlist(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     position_id = db.Column(db.Integer, db.ForeignKey('internship_position.id'), nullable=False)
-    student_id = db.Column(db.Integer, db.ForeignKey('students.id'), nullable=False)
+    student_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    staff_id =db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) #the staff member who shortlisted the student
     status = db.Column(db.String(20), nullable=False, default='pending') #pending, accepted, rejected
     date_added = db.Column(db.DateTime, default=datetime.utcnow)
 
     __table_args__ = (db.UniqueConstraint('position_id', 'student_id', name='_position_student_uc'),)
 
 
-    def __init__(self, position_id, student_id):
+    def __init__(self,staff_id,  position_id, student_id):
+        self.staff_id = staff_id
         self.position_id = position_id
         self.student_id = student_id
           
@@ -22,6 +24,7 @@ class Shortlist(db.Model):
             'id': self.id,
             'position_id': self.position_id,
             'student_id': self.student_id,
+            'staff_id': self.staff_id,
             'status': self.status,
             'date_added': self.date_added.isoformat()
         }
