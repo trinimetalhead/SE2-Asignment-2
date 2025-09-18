@@ -88,7 +88,7 @@ def list_staff_command():
         print("No staff users found.")
         return
     for user in staff:
-        print(f"ID: {user.id}, Username: {user.username}, Name: {user.first_name} {user.last_name}, Position: {user.staff_profile.position}")
+        print(f"ID: {user.id}, Username: {user.username}, Name: {user.first_name} {user.last_name}, Position: {user.position}")
 
 @user_cli.command("list-employers", help="Lists all employer users in the database")
 def list_employers_command():
@@ -97,7 +97,7 @@ def list_employers_command():
         print("No employer users found.")
         return
     for user in employers:
-        print(f"ID: {user.id}, Username: {user.username}, Name: {user.first_name} {user.last_name}, Company: {user.employer_profile.company}")
+        print(f"ID: {user.id}, Username: {user.username}, Name: {user.first_name} {user.last_name}, Company: {user.company}")
 
 @user_cli.command("list-students", help="Lists all student users in the database")
 def list_students_command():
@@ -106,7 +106,7 @@ def list_students_command():
         print("No student users found.")
         return
     for user in students:
-        print(f"ID: {user.id}, Username: {user.username}, Name: {user.first_name} {user.last_name}, Major: {user.student_profile.major}")
+        print(f"ID: {user.id}, Username: {user.username}, Name: {user.first_name} {user.last_name}, Major: {user.major}")
 
 
 '''

@@ -25,16 +25,27 @@ class User(db.Model):
     #staff_profile = db.relationship('Staff', backref='user', uselist=False, cascade='all, delete-orphan')
     #employer_profile = db.relationship('Employer', backref='user', uselist=False, cascade='all, delete-orphan')
 
+
+    def set_password(self, password):
+        """Create hashed password."""
+        self.password = generate_password_hash(password)
+    
+    def check_password(self, password):
+        """Check hashed password."""
+        return check_password_hash(self.password, password)
+
+#CREATE
+
     def __init__(self, username, password, first_name, last_name):
         self.username = username
         self.set_password(password)
         self.first_name = first_name
         self.last_name = last_name
-        
 
-        # validate role 
-        #if role not in ['student', 'staff', 'employer']:
-        #    raise ValueError("Role must be 'student', 'staff', or 'employer'")
+
+#READ
+    def __repr__(self):
+        return f'<User {self.id} - {self.username}, Role: {self.role}>'
 
     def get_json(self):
         return{
@@ -44,21 +55,34 @@ class User(db.Model):
             'last_name': self.last_name,
             'role': self.role
         }
-
-    def set_password(self, password):
-        """Create hashed password."""
-        self.password = generate_password_hash(password)
     
-    def check_password(self, password):
-        """Check hashed password."""
-        return check_password_hash(self.password, password)
+#UPDATE
+    def update_username(self, new_username):
+        self.username = new_username
+        db.session.commit()
+        return True
     
-    #helper methods 
+    def update_first_name(self, new_first_name):
+        self.first_name = new_first_name
+        db.session.commit()
+        return True
+    
+    def update_last_name(self, new_last_name):
+        self.last_name = new_last_name
+        db.session.commit()
+        return True
+    
+    def update_password(self, new_password):
+        self.set_password(new_password)
+        db.session.commit()
+        return True
 
-    def is_student(self):
-        return self.role == 'student'
-    def is_staff(self):
-        return self.role == 'staff'
-    def is_employer(self):
-        return self.role == 'employer'
+
+    #DELETE
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+
+    
 

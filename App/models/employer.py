@@ -13,13 +13,15 @@ class Employer(User):
     # relationship to job postings
     internship_positions = db.relationship('InternshipPosition', backref='employer', lazy=True, cascade='all, delete-orphan')
 
+#CREATE
     def __init__(self, username, password, first_name, last_name, company = 'Tech Corp'):
         super().__init__(username, password, first_name, last_name)
         self.role = 'employer'
         self.company = company
 
+#READ
     def __repr__(self):
-        return f'<Employer {self.id} - {self.user.first_name} {self.user.last_name}, Company: {self.company}>'
+        return f'<Employer {self.id} - {self.first_name} {self.last_name}, Company: {self.company}>'
     
     def get_json(self):
         base_json = super().get_json()
@@ -27,4 +29,12 @@ class Employer(User):
         return base_json
 
     def get_full_name(self):
-        return f'{self.user.first_name} {self.user.last_name}'
+        return f'{self.first_name} {self.last_name}'
+    
+#UPDATE
+    def update_company(self, new_company):
+        self.company = new_company
+        db.session.commit()
+
+#DELETE
+    #Handled by cascade user model
