@@ -31,7 +31,7 @@ User Commands
 user_cli = AppGroup('user', help='User object commands') 
 # Then define the command and any parameters and annotate it with the group (@)
 
-
+#CREATE
 @user_cli.command("create-student", help="Creates a student user")
 @click.argument("username", default="alice")
 @click.argument("password", default="alicepass")
@@ -71,6 +71,7 @@ def create_employer_command(username,password,first_name,last_name,company):
     except ValueError as e:
         print(F"error: {e}")
 
+#READ
 @user_cli.command("list", help="Lists users in the database")
 @click.argument("format", default="string")
 def list_user_command(format):
@@ -108,6 +109,11 @@ def list_students_command():
     for user in students:
         print(f"ID: {user.id}, Username: {user.username}, Name: {user.first_name} {user.last_name}, Major: {user.major}")
 
+#UPDATE
+
+
+
+#DELETE
 
 '''
 Test Commands
