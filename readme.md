@@ -194,13 +194,13 @@ If you are adding models you may need to migrate the database with the commands 
 
 
 
-# Command Documentation
+# CLI Command Documentation
 
 ### NOTE: Controllers were used in the creation of this database
 
 ## FIrstly you must install requirements:
 
-open your command line 'ctrl' + ' ` '
+open your command line 'ctrl' +  ` 
 
 ```bash
 $ pip install -r requirements.txt
