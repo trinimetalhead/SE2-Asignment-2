@@ -220,6 +220,18 @@ def list_positions_by_employer(employer_id):
     for position in positions:
         print(f"ID: {position.id}, Title: {position.title}, Description: {position.description}, Requirements: {position.requirements}")
 
+@employer_cli.command("view-shortlists", help="View all shortlists for a position")
+@click.argument("position_id")
+def view_shortlists_command(position_id):
+    shortlists = get_shortlists_position(position_id)
+    if not shortlists:
+        print(f"No students shortlisted for position {position_id}.")
+        return
+    position = get_position_id(position_id)
+    print(f"Shortlists for {position_id} {position.title}:")
+    for shortlist in shortlists:
+        student = get_user(shortlist.student_id)
+        print(f"Shortlist ID: {shortlist.id}, Student: {shortlist.student_id} {student.first_name}_{student.last_name}, Status: {shortlist.status}, Date Added: {shortlist.date_added}")
 
 #UPDATE
 
