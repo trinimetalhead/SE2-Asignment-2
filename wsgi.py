@@ -203,7 +203,7 @@ def create_position(employer_id, title, description, requirements):
 @employer_cli.command("list-positions", help="Lists all internship positions for an employer")
 @click.argument("employer_id")
 def list_positions(employer_id):
-    positions = get_internships_by_employer(employer_id)
+    positions = get_positions_by_employer(employer_id)
     if not positions:
         print("No positions found for this employer.")
         return
