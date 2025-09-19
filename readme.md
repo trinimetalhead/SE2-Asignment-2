@@ -191,3 +191,30 @@ If you are running into errors in gitpod when updateding your github actions fil
 ## Database Issues
 
 If you are adding models you may need to migrate the database with the commands given in the previous database migration section. Alternateively you can delete you database file.
+
+
+
+# Command Documentation
+
+## Firstly You Must Initialize the Database:
+
+flask init
+
+### This will create and populate the database with three users:
+id:1 , Student, Alice_Johnson, Major=Compluter Science 
+id:2 , Staff, Alice_Smith, Position=Administrator 
+id:3 , Employer, Emily_Davis, Company=Tech Corp
+
+### and two Internship Positions:
+Position id: 1, Software Engineering Intern, {Description}, {Requirements}, {employer id}
+Position id: 2, Data Science Intern, {Description}, {Requirements}, {employer id}
+
+
+## '''
+## User Commands
+## '''
+
+
+
+Create Student:
+
