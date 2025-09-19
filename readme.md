@@ -204,11 +204,14 @@ flask init
 
 ### This will create and populate the database with three users:
 id:1 , Student, Alice_Johnson, Major=Compluter Science 
+
 id:2 , Staff, Alice_Smith, Position=Administrator 
+
 id:3 , Employer, Emily_Davis, Company=Tech Corp
 
 ### and two Internship Positions:
 Position id: 1, Software Engineering Intern, {Description}, {Requirements}, {employer id}
+
 Position id: 2, Data Science Intern, {Description}, {Requirements}, {employer id}
 
 
