@@ -212,5 +212,5 @@ Position id: 2, Data Science Intern, {Description}, {Requirements}, {employer id
 
 ## User Commands
 
-###SCreate Student:
+### Create Student:
 
