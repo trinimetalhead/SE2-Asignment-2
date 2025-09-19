@@ -313,7 +313,7 @@ flask staff shortlisted-students positionID
 
 ### Detele : 
 
-flask staff delete shortlist_id 
+flask staff delete shortlist_id
 //deletes shortlist entry with ID 
 
 
@@ -322,6 +322,5 @@ flask staff delete shortlist_id
 ### Read 
 
 flask student view-shortlists studentID
-
 //shows all positions that student with ID is shortlisted for
 
