@@ -198,7 +198,13 @@ If you are adding models you may need to migrate the database with the commands 
 
 ### NOTE: Controllers were used in the creation of this database
 
-## Firstly You Must Initialize the Database:
+## FIrstly you must install requirements:
+
+open your command line 'ctrl' + ' ` '
+
+pip install -r requirements.txt
+
+## Then You Must Initialize the Database:
 
 flask init
 
