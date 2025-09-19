@@ -56,6 +56,18 @@ class InternshipPosition(db.Model):
         self.date_posted = db.func.current_timestamp()
         db.session.commit()
 
+    def update(self, title=None, description=None, requirements=None):
+        if title:
+            self.title = title
+        if description:
+            self.description = description
+        if requirements:
+            self.requirements = requirements
+        self.date_posted = db.func.current_timestamp()
+        db.session.commit()
+        return self
+
+
     #DELETE
     
     def delete(self):
