@@ -44,6 +44,7 @@ class User(db.Model):
 
 
 #READ
+
     def __repr__(self):
         return f'<User {self.id} - {self.username}, Role: {self.role}>'
 

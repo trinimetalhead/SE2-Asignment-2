@@ -51,6 +51,11 @@ def delete_position(position_id):
         return print(f"Position {position_id} Deleted.")
 
 
+def update_positon(position_id, **kwargs):
+    position = get_position_id(position_id)
+    if position:
+        return position.update(**kwargs)
+    return print(f"Position {position_id}not found.")
 
 
 
