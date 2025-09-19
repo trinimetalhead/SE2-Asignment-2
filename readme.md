@@ -365,7 +365,7 @@ $ flask staff shortlisted-students positionID
 //lists all shortlisted students for position with ID 
 
 
-### Detele : 
+### Delete : 
 
 ```bash
 $ flask staff delete shortlist_id
