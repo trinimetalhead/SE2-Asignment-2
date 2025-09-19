@@ -4,12 +4,56 @@ def create_internship_position(employer_id, title, description, requirements):
     #check if employer exisits
     employer = Employer.query.get(employer_id)
     if not employer:
-        raise ValueError("Employer does not exist")
+        raise ValueError("This Employer does not exist or Incorrect employer ID")
     
     position = InternshipPosition(title=title, description=description, requirements=requirements, employer_id=employer_id)
     db.session.add(position)
     db.session.commit()
     return position
+
+
+def get_position_id(position_id):
+    return InternshipPosition.query.get(position_id)
+
+def get_all_positions():
+    return InternshipPosition.query.all()
+
+def get_positions_by_employer(employer_id):
+    return InternshipPosition.query.filter_bY(employer_id=employer_id).all()
+
+
+
+def update_position_title(position_id,title):
+    position = get_position_id(position_id)
+    if position:
+        position.update_title(title)
+        return position.__repr__()
+    return print(f"Position Not Found with id {position_id}")
+
+def update_position_description(position_id,description):
+    position = get_position_id(position_id)
+    if position:
+        position.update_description(description)
+        return position.__repr__()
+    return print(f"Position Not Found with id {position_id}")
+
+def update_position_requirements(position_id,requirements):
+    position = get_position_id(position_id)
+    if position:
+        position.update_requirements(requirements)
+        return print(f"Position {position_id}: requirements updated {requirements}")
+    return print(f"Position Not Found with id {position_id}")
+
+def delete_position(position_id):
+    position = get_position_id(position_id)
+    if position:
+        position.delete()
+        return print(f"Position {position_id} Deleted.")
+
+
+
+
+
 
 def get_internships_by_employer(employer_id):
     return InternshipPosition.query.filter_by(employer_id=employer_id).all()

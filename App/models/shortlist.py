@@ -48,6 +48,8 @@ class Shortlist(db.Model):
         db.session.commit()
         return True
     
+    
+    
 #DELETE 
     def delete(self):
         db.session.delete(self)
