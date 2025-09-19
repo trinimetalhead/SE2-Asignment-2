@@ -196,6 +196,8 @@ If you are adding models you may need to migrate the database with the commands 
 
 # Command Documentation
 
+### NOTE: Controllers were used in the creation of this database
+
 ## Firstly You Must Initialize the Database:
 
 flask init
