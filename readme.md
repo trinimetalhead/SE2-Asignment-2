@@ -202,12 +202,14 @@ If you are adding models you may need to migrate the database with the commands 
 
 open your command line 'ctrl' + ' ` '
 
-pip install -r requirements.txt
+```bash
+$ pip install -r requirements.txt
+```
 
 ## Then You Must Initialize the Database:
-
-flask init
-
+```bash
+$ flask init
+```
 ### This will create and populate the database with three users:
 id:1 , Student, Alice_Johnson, Major=Compluter Science 
 
@@ -225,81 +227,114 @@ Position id: 2, Data Science Intern, {Description}, {Requirements}, {employer id
 
 ### Create :
 
-flask user create-student "username" "password" "FirstName" "LastName" "Major"
+```bash
+$ flask user create-student "username" "password" "FirstName" "LastName" "Major"
 
-flask user create-staff "username" "password" "FirstName" "LastName" "Position"
+$ flask user create-staff "username" "password" "FirstName" "LastName" "Position"
 
-flask user create-employer "username" "password" "FirstName" "LastName" "Company"
-
+$ flask user create-employer "username" "password" "FirstName" "LastName" "Company"
+```
 ### Read :
-
-flask user list 
+```bash
+$ flask user list
+``` 
 //Lists all users in the database
-
-flask user list-staff
+```bash
+$ flask user list-staff
+```
 //lists all staff users in the database
-
-flask user list-employers
+```bash
+$ flask user list-employers
+```
 //lists all employers users in the database
-
-flask user list-students
+```bash
+$ flask user list-students
+```
 //lists all students users in the database
 
 ### Update : 
 
-flask user update-username userID "New Username"
+```bash
+$ flask user update-username userID "New Username"
+```
 //updates the given user's username
 
-flask user update-first-name userID "new first name"
+```bash
+$ flask user update-first-name userID "new first name"
+```
 //updates the given user's first name 
 
-flask user update-last-name userID "new last name"
+```bash
+$ flask user update-last-name userID "new last name"
+```
 //updates the given user's last name 
 
-flask user update-password userID "new_password" 
+```bash
+$ flask user update-password userID "new_password" 
+```
 //updates the given user's password 
 
 ### Delete : 
 
-flask user delete UserID
+```bash
+$ flask user delete UserID
+```
 //deletes the user with the given id
 
 ## Employer Commands 
 
 ### Create : 
 
-flask employer create-position employerID "title" "description" "requirements"
+```bash
+$ flask employer create-position employerID "title" "description" "requirements"
+```
 //creates an internship position with the given arguments
 
 ### Read :
 
-flask employer list-positions employerID
+```bash
+$ flask employer list-positions employerID
+```
 //list all the internship positions posted by the employer with ID 
 
-flask employer view-shortlists positionID
+```bash
+$ flask employer view-shortlists positionID
+```
 //displays all shortlisted students for positios with ID 
 
 
 ### Update
 
-flask employer update-title positionID "New Title"
+```bash
+$ flask employer update-title positionID "New Title"
+```
 //updates the title of the position with ID 
 
-flask employer update-description positionID "New Description"
+```bash
+$ flask employer update-description positionID "New Description"
+```
 //updates the description of the position with ID 
 
-flask employer update-requirements positionID "New Requirements"
+```bash
+$ flask employer update-requirements positionID "New Requirements"
+```
 //updates the requiremetns of the position with ID 
 
-flask employer accept positionID studentID 
+```bash
+$ flask employer accept positionID studentID 
+```
 //accepts the Student with ID to the position with ID 
 
-flask employer reject positionID studentID 
+```bash
+$ flask employer reject positionID studentID 
+```
 //rejects the Student with ID to the position with ID 
 
 ### Delete :
 
-flask employer delete positionID
+```bash
+$ flask employer delete positionID
+```
 //deletes the posted internship position with ID 
 
 
@@ -307,24 +342,34 @@ flask employer delete positionID
 
 ### Create :
 
-flask staff add staffID studentID positionID 
+```bash
+$ flask staff add staffID studentID positionID 
+```
 //the staff with ID adds the student with ID to the internship position with ID 
 
 ### Read : 
 
-flask staff view-positions 
+```bash
+$ flask staff view-positions 
+```
 //lists all internship positions
 
-flask staff list-shortlists 
+```bash
+$ flask staff list-shortlists 
+```
 //lists all students shortlisted for all students
 
-flask staff shortlisted-students positionID
+```bash
+$ flask staff shortlisted-students positionID
+```
 //lists all shortlisted students for position with ID 
 
 
 ### Detele : 
 
-flask staff delete shortlist_id
+```bash
+$ flask staff delete shortlist_id
+```
 //deletes shortlist entry with ID 
 
 
@@ -332,6 +377,8 @@ flask staff delete shortlist_id
 
 ### Read 
 
-flask student view-shortlists studentID
+```bash
+$ flask student view-shortlists studentID
+```
 //shows all positions that student with ID is shortlisted for
 
