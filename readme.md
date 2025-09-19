@@ -210,11 +210,7 @@ Position id: 1, Software Engineering Intern, {Description}, {Requirements}, {emp
 Position id: 2, Data Science Intern, {Description}, {Requirements}, {employer id}
 
 
-## '''
 ## User Commands
-## '''
 
-
-
-Create Student:
+###SCreate Student:
 
