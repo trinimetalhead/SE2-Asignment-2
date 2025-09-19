@@ -327,6 +327,15 @@ def add_to_shortlist_command(staff_id, student_id, position_id):
         print(f"Error: {e}")
 
 #READ
+@staff_cli.command("view-positions", help="View all internship positions")
+def view_positions_command():
+    positions = internship_position.InternshipPosition.query.all()
+    if not positions:
+        print("No internship positions found.")
+        return
+    for position in positions:
+        employer = get_user(position.employer_id)
+        print(f"ID: {position.id}, Title: {position.title}, Description: {position.description}, Requirements: {position.requirements}, Employer: {employer.id} {employer.first_name} {employer.last_name}")
 
 @staff_cli.command("list-shortlists", help="Lists all shortlists in the database")
 def list_shortlists_command():
