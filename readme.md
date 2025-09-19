@@ -212,5 +212,115 @@ Position id: 2, Data Science Intern, {Description}, {Requirements}, {employer id
 
 ## User Commands
 
-### Create Student:
+### Create :
+
+flask user create-student "username" "password" "FirstName" "LastName" "Major"
+
+flask user create-staff "username" "password" "FirstName" "LastName" "Position"
+
+flask user create-employer "username" "password" "FirstName" "LastName" "Company"
+
+### Read :
+
+flask user list 
+//Lists all users in the database
+
+flask user list-staff
+//lists all staff users in the database
+
+flask user list-employers
+//lists all employers users in the database
+
+flask user list-students
+//lists all students users in the database
+
+### Update : 
+
+flask user update-username userID "New Username"
+//updates the given user's username
+
+flask user update-first-name userID "new first name"
+//updates the given user's first name 
+
+flask user update-last-name userID "new last name"
+//updates the given user's last name 
+
+flask user update-password userID "new_password" 
+//updates the given user's password 
+
+### Delete : 
+
+flask user delete UserID
+//deletes the user with the given id
+
+## Employer Commands 
+
+### Create : 
+
+flask employer create-position employerID "title" "description" "requirements"
+//creates an internship position with the given arguments
+
+### Read :
+
+flask employer list-positions employerID
+//list all the internship positions posted by the employer with ID 
+
+flask employer view-shortlists positionID
+//displays all shortlisted students for positios with ID 
+
+
+### Update
+
+flask employer update-title positionID "New Title"
+//updates the title of the position with ID 
+
+flask employer update-description positionID "New Description"
+//updates the description of the position with ID 
+
+flask employer update-requirements positionID "New Requirements"
+//updates the requiremetns of the position with ID 
+
+flask employer accept positionID studentID 
+//accepts the Student with ID to the position with ID 
+
+flask employer reject positionID studentID 
+//rejects the Student with ID to the position with ID 
+
+### Delete :
+
+flask employer delete positionID
+//deletes the posted internship position with ID 
+
+
+## Staff Commands 
+
+### Create :
+
+flask staff add staffID studentID positionID 
+//the staff with ID adds the student with ID to the internship position with ID 
+
+### Read : 
+
+flask staff view-positions 
+//lists all internship positions
+
+flask staff list-shortlists 
+//lists all students shortlisted for all students
+
+flask staff shortlisted-students positionID
+//lists all shortlisted students for position with ID 
+
+
+### Detele : 
+
+flask staff delete shortlist_id 
+//deletes shortlist entry with ID 
+
+
+## Student Commands
+
+### Read 
+
+flask student view-shortlists studentID
+//shows all positions that student with ID is shortlisted for
 

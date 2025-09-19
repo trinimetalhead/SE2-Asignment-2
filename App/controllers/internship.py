@@ -19,7 +19,7 @@ def get_all_positions():
     return InternshipPosition.query.all()
 
 def get_positions_by_employer(employer_id):
-    return InternshipPosition.query.filter_bY(employer_id=employer_id).all()
+    return InternshipPosition.query.filter_by(employer_id=employer_id).all()
 
 
 

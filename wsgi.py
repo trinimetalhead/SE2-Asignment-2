@@ -247,7 +247,7 @@ def update_position(position_id, field, value):
     else: 
         print(f"Position {position_id} not found.")
 
-@employer_cli.command("update-posititon-title", help="Updates an internship position title")
+@employer_cli.command("update-title", help="Updates an internship position title")
 @click.argument("position_id")
 @click.argument("title")
 def update_position_title(position_id, title):
@@ -257,7 +257,7 @@ def update_position_title(position_id, title):
     else: 
         print(f"Position {position_id} not found.")
 
-@employer_cli.command("update-position-description", help="Updates an internship position description")
+@employer_cli.command("update-description", help="Updates an internship position description")
 @click.argument("position_id") 
 @click.argument("description")
 def update_position_description(position_id, description):
@@ -267,7 +267,7 @@ def update_position_description(position_id, description):
     else: 
         print(f"Position {position_id} not found.")
 
-@employer_cli.command("update-position-requirements", help="Updates an internship position requirements")
+@employer_cli.command("update-requirements", help="Updates an internship position requirements")
 @click.argument("position_id") 
 @click.argument("requirements")
 def update_position_requirements(position_id, requirements):
@@ -292,11 +292,24 @@ def accept_student_command(position_id, student_id):
             return
     return print(f"Student {student_id} not found in shortlist for position {position_id}.")
 
-
+@employer_cli.command("reject", help="Reject a student for a position")
+@click.argument("position_id")
+@click.argument("student_id")
+def reject_student_command(position_id, student_id):
+    shortlists = get_shortlists_position(position_id)
+    if not shortlists:
+        return print(f"No students shortlisted for position {position_id}.")
+    
+    for shortlist in shortlists:
+        if shortlist.student_id == int(student_id):
+            shortlist.reject()
+            print(f"Student {student_id} rejected for position {position_id}.")
+            return
+    return print(f"Student {student_id} not found in shortlist for position {position_id}.")
 
 #DELETE
 
-@employer_cli.command("delete-position",help="Deletes an Internship Position")
+@employer_cli.command("delete",help="Deletes an Internship Position")
 @click.argument("position_id")
 def delete_position_command(position_id):
     delete_position(position_id)
@@ -344,7 +357,10 @@ def list_shortlists_command():
         print("No shortlists found.")
         return
     for shortlist in shortlists:
-        print(f"Shortlist ID: {shortlist.id}, Position ID: {shortlist.position_id}, Student ID: {shortlist.student_id}, Status: {shortlist.status}, Date Added: {shortlist.date_added}")
+        position = get_position_id(shortlist.position_id)
+        student = get_user(shortlist.student_id)
+        staff = get_user(shortlist.staff_id) 
+        print(f"Shortlist ID: {shortlist.id}, Position: {position.title}, Student: {shortlist.student_id}  {student.first_name}_{student.last_name}, Status: {shortlist.status}, Shortlisted by Staff: {shortlist.staff_id} {staff.first_name}_{staff.last_name} on {shortlist.date_added}")
 
 @staff_cli.command("shortlisted-students", help="Get all shortlisted students for a position")
 @click.argument("position_id")
@@ -356,20 +372,8 @@ def get_shortlisted_students_command(position_id):
     for shortlist in shortlists:
         print(f"Shortlist ID: {shortlist.id}, Student ID: {shortlist.student_id}, Status: {shortlist.status}, Date Added: {shortlist.date_added}")
     
-@staff_cli.command("list-shortlists", help="Lists all shortlists in the database")
-def list_shortlists_command():
-    shortlists = get_all_shortlists()
-    if not shortlists:
-        print("No shortlists found.")
-        return
-    for shortlist in shortlists:
-        position = get_position_id(shortlist.position_id)
-        student = get_user(shortlist.student_id)
-        staff = get_user(shortlist.staff_id) 
-        print(f"Shortlist ID: {shortlist.id}, Position: {position.title}, Student: {shortlist.student_id}  {student.first_name}_{student.last_name}, Status: {shortlist.status}, Shortlisted by Staff: {shortlist.staff_id} {staff.first_name}_{staff.last_name} on {shortlist.date_added}")
-
 #DELETE
-@staff_cli.command("delete-shortlist", help="Deletes a shortlist entry")
+@staff_cli.command("delete", help="Deletes a shortlist entry")
 @click.argument("shortlist_id")
 def delete_shortlist_command(shortlist_id):
     try:
