@@ -270,6 +270,9 @@ def update_position_requirements(position_id, requirements):
 @click.argument("student_id")
 def accept_student_command(position_id, student_id):
     shortlists = get_shortlists_position(position_id)
+    if not shortlists:
+        return print(f"No students shortlisted for position {position_id}.")
+    
     for shortlist in shortlists:
         if shortlist.student_id == int(student_id):
             shortlist.accept()
