@@ -67,7 +67,7 @@ def get_internship_shortlists(position_id):
     return Shortlist.query.filter_by(position_id=position_id).all()
 
 def accept_student(position_id):
-    shortlist = Shortlist.quesry.get(position_id)
+    shortlist = Shortlist.query.get(position_id)
     if shortlist:
         shortlist.accept()
         return True

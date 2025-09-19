@@ -265,6 +265,20 @@ def update_position_requirements(position_id, requirements):
     else: 
         print(f"Position {position_id} not found.")
 
+@employer_cli.command("accept", help="Accept a student for a position")
+@click.argument("position_id")
+@click.argument("student_id")
+def accept_student_command(position_id, student_id):
+    shortlists = get_shortlists_position(position_id)
+    for shortlist in shortlists:
+        if shortlist.student_id == int(student_id):
+            shortlist.accept()
+            print(f"Student {student_id} accepted for position {position_id}.")
+            return
+    return print(f"Student {student_id} not found in shortlist for position {position_id}.")
+
+
+
 #DELETE
 
 @employer_cli.command("delete-position",help="Deletes an Internship Position")
@@ -297,7 +311,48 @@ def add_to_shortlist_command(staff_id, student_id, position_id):
     except ValueError as e:
         print(f"Error: {e}")
 
+#READ
 
+@staff_cli.command("list-shortlists", help="Lists all shortlists in the database")
+def list_shortlists_command():
+    shortlists = get_all_shortlists()
+    if not shortlists:
+        print("No shortlists found.")
+        return
+    for shortlist in shortlists:
+        print(f"Shortlist ID: {shortlist.id}, Position ID: {shortlist.position_id}, Student ID: {shortlist.student_id}, Status: {shortlist.status}, Date Added: {shortlist.date_added}")
+
+@staff_cli.command("shortlisted-students", help="Get all shortlisted students for a position")
+@click.argument("position_id")
+def get_shortlisted_students_command(position_id):
+    shortlists = get_shortlists_position(position_id)
+    if not shortlists:
+        print(f"No students shortlisted for position {position_id}.")
+        return
+    for shortlist in shortlists:
+        print(f"Shortlist ID: {shortlist.id}, Student ID: {shortlist.student_id}, Status: {shortlist.status}, Date Added: {shortlist.date_added}")
+    
+@staff_cli.command("list-shortlists", help="Lists all shortlists in the database")
+def list_shortlists_command():
+    shortlists = get_all_shortlists()
+    if not shortlists:
+        print("No shortlists found.")
+        return
+    for shortlist in shortlists:
+        position = get_position_id(shortlist.position_id)
+        student = get_user(shortlist.student_id)
+        staff = get_user(shortlist.staff_id) 
+        print(f"Shortlist ID: {shortlist.id}, Position: {position.title}, Student: {shortlist.student_id}  {student.first_name}_{student.last_name}, Status: {shortlist.status}, Shortlisted by Staff: {shortlist.staff_id} {staff.first_name}_{staff.last_name} on {shortlist.date_added}")
+
+#DELETE
+@staff_cli.command("delete-shortlist", help="Deletes a shortlist entry")
+@click.argument("shortlist_id")
+def delete_shortlist_command(shortlist_id):
+    try:
+        delete_shortlist(shortlist_id)
+        print(f"Shortlist {shortlist_id} deleted.")
+    except ValueError as e:
+        print(f"Error: {e}")
 
 app.cli.add_command(staff_cli) # add the group to the cli
 
@@ -308,7 +363,16 @@ Student Commands
 
 student_cli = AppGroup('student', help='student commands')
 
-
+@student_cli.command("view-shortlists", help="View all shortlists for a student")
+@click.argument("student_id")
+def view_shortlists_command(student_id):
+    shortlists = get_shortlists_student(student_id)
+    if not shortlists:
+        print(f"No shortlists found for student {student_id}.")
+        return
+    for shortlist in shortlists:
+        position = get_position_id(shortlist.position_id)
+        print(f"Shortlist ID: {shortlist.id}, Position: {position.title}, Status: {shortlist.status}, Date Added: {shortlist.date_added}")
 
 
 app.cli.add_command(student_cli) # add the group to the cli

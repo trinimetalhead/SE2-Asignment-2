@@ -40,8 +40,8 @@ def get_all_shortlists():
 def get_shortlists_student(student_id):
     return Shortlist.query.filter_by(student_id=student_id).all()
 
-def get_shoetlis_position(position_id):
-    return Shortlist.query.filter_by(positon_id=position_id).all()
+def get_shortlists_position(position_id):
+    return Shortlist.query.filter_by(position_id=position_id).all()
 
 def get_shortlists_staff(staff_id):
     return Shortlist.query.filter_by(staff_id=staff_id).all()
