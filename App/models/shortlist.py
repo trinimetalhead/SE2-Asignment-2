@@ -13,12 +13,13 @@ class Shortlist(db.Model):
 
     __table_args__ = (db.UniqueConstraint('position_id', 'student_id', name='_position_student_uc'),)
 
-
+#CREATE
     def __init__(self,staff_id,  position_id, student_id):
         self.staff_id = staff_id
         self.position_id = position_id
         self.student_id = student_id
-          
+
+#READ     
     def get_json(self):
         return {
             'id': self.id,
@@ -33,6 +34,27 @@ class Shortlist(db.Model):
         return f'<Shortlist {self.id} - Position: {self.position_id}, Student: {self.student_id}, Status: {self.status}>'
     
 
+#UPDATE
+
+    def update_status(self, new_status):
+        if new_status in ['pending', 'accepted', 'rejected']:
+            self.status = new_status
+            db.session.commit()
+            return True
+        return False
+    
+    def update_date_added(self, new_date):
+        self.date_added = new_date
+        db.session.commit()
+        return True
+    
+#DELETE 
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+        return True
+    
+
     def accept(self):
         self.status = 'accepted'
         db.session.commit()
@@ -40,5 +62,7 @@ class Shortlist(db.Model):
     def reject(self):
         self.status = 'rejected'
         db.session.commit()
+
+
 
         

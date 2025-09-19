@@ -2,7 +2,7 @@ from App.database import db
 
 class InternshipPosition(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    employer_id = db.Column(db.Integer, db.ForeignKey('employer.id'), nullable=False)
+    employer_id = db.Column(db.Integer, db.ForeignKey('employer.id'), nullable=False)   
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
     requirements = db.Column(db.Text, nullable=True)
@@ -10,6 +10,7 @@ class InternshipPosition(db.Model):
 
     #relationship to shortlist 
     shortlists = db.relationship('Shortlist', backref='internship_position', lazy=True, cascade='all, delete-orphan')
+#CREATE
 
     def __init__(self, title, description,requirements, employer_id):
         self.title = title
@@ -17,6 +18,7 @@ class InternshipPosition(db.Model):
         self.requirements = requirements
         self.employer_id = employer_id
     
+#READ
 
     def __repr__(self):
         return f'<InternshipPosition {self.id} - {self.title}>'
@@ -28,6 +30,25 @@ class InternshipPosition(db.Model):
             'description': self.description,
             'employer_id': self.employer_id
         }
-    
+#UPDATE 
     def get_shoetlist(self):
         return self.shortlists
+    
+    def update_title(self, new_title):
+        self.title = new_title
+        db.session.commit()
+    
+    def update_description(self, new_description):
+        self.description = new_description
+        db.session.commit()
+
+    def update_requirements(self, new_requirements):
+        self.requirements = new_requirements
+        db.session.commit()
+
+    #DELETE
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+        return True

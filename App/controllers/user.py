@@ -28,7 +28,7 @@ def create_employer(username, password, first_name, last_name, company='Unknown 
     db.session.commit()
 
 
-
+#READ
 def get_user_by_username(username):
     result = db.session.execute(db.select(User).filter_by(username=username))
     return result.scalar_one_or_none()
@@ -46,14 +46,6 @@ def get_all_users_json():
     users = [user.get_json() for user in users]
     return users
 
-def update_user(id, username):
-    user = get_user(id)
-    if user:
-        user.username = username
-        # user is already in the session; no need to re-add
-        db.session.commit()
-        return True
-    return None
 
 def get_user_by_role(role):
     return User.query.filter_by(role=role).all()
@@ -67,3 +59,21 @@ def get_all_employers():
 def get_all_staff():
     return get_user_by_role('staff')
 
+#UPDATE 
+def update_user(id, **kwargs):
+    user = get_user(id)
+    if user:
+        user.update_username = kwargs
+        # user is already in the session; no need to re-add
+        db.session.commit()
+        return True
+    return None
+
+#DELETE
+def delete_user(id):
+    user = get_user(id)
+    if user:
+        user.delete()
+        db.session.commit()
+        return True
+    return False
