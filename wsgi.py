@@ -70,6 +70,7 @@ def create_employer_command(username,password,first_name,last_name,company):
         print(F"error: {e}")
 
 #READ
+
 @user_cli.command("list", help="Lists users in the database")
 @click.argument("format", default="string")
 def list_user_command(format):
@@ -282,7 +283,19 @@ Staff Commands
 
 staff_cli = AppGroup('staff', help='staff commands') 
 
+#CREATE
+#create staff command under USER cli group
 
+@staff_cli.command("add", help="Add a student to a position shortlist")
+@click.argument("staff_id")
+@click.argument("student_id")
+@click.argument("position_id")
+def add_to_shortlist_command(staff_id, student_id, position_id):
+    try:
+        shortlist = add_to_shortlist(staff_id, student_id, position_id)
+        print(f"Student {student_id} added to shortlist for position {position_id} by staff {staff_id}. Shortlist ID: {shortlist.id}")
+    except ValueError as e:
+        print(f"Error: {e}")
 
 
 
