@@ -60,7 +60,7 @@ def update_positon(position_id, **kwargs):
 
 
 
-def get_internships_by_employer(employer_id):
+""" def get_internships_by_employer(employer_id):
     return InternshipPosition.query.filter_by(employer_id=employer_id).all()
 
 def get_internship_shortlists(position_id):
@@ -88,4 +88,4 @@ def reject_all_other_students(position_id, accepted_student_id):
         shortlist.status = 'rejected'
     db.session.commit()
     
-    return len(shortlists)
+    return len(shortlists) """
