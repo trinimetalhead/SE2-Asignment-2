@@ -39,7 +39,7 @@ user_cli = AppGroup('user', help='User object commands')
 def create_student_command(username, password, first_name, last_name, major):
     try:
         create_student(username, password, first_name, last_name, major)
-        print(f'Student {username} created!')
+        print(f'Student {username} created with ID {get_user_by_username(username).id}')
     except ValueError as e:
         print(F"error: {e}")
 
@@ -52,7 +52,7 @@ def create_student_command(username, password, first_name, last_name, major):
 def create_staff_command(username,password,first_name,last_name,position):
     try:
         create_staff(username,password,first_name,last_name,position)
-        print(f'Staff {username} created!')
+        print(f'Staff {username} created with id {get_user_by_username(username).id}')
     except ValueError as e:
         print(F"error: {e}")
 
@@ -65,7 +65,7 @@ def create_staff_command(username,password,first_name,last_name,position):
 def create_employer_command(username,password,first_name,last_name,company):
     try:
         create_employer(username,password,first_name,last_name,company)
-        print(f'Employer {username} created!')
+        print(f'Employer {username} created with id {get_user_by_username(username).id}')
     except ValueError as e:
         print(F"error: {e}")
 
@@ -79,7 +79,6 @@ def list_user_command(format):
     else:
         print(get_all_users_json())
 
-app.cli.add_command(user_cli) # add the group to the cli
 
 @user_cli.command("list-staff", help="Lists all staff users in the database")
 def list_staff_command():
@@ -114,27 +113,27 @@ def list_students_command():
 @click.argument("user_id")
 @click.argument("new_username")
 def update_username_command(user_id, new_username):
-    user = update_user(user_id, username=new_username)
+    user = update_username(user_id, new_username)
     if user:
         print(f"User {user_id} username updated to {new_username}")
     else:
         print(f"User {user_id} not found.")
 
-@user_cli.command("update-first-name", help="Updates a user's first name")
+@user_cli.command("update-firstname", help="Updates a user's first name")
 @click.argument("user_id") 
 @click.argument("new_first_name")
 def update_first_name_command(user_id, new_first_name):
-    user = update_user(user_id, first_name=new_first_name)
+    user = update_fristname(user_id, new_first_name)
     if user:
         print(f"User {user_id} first name updated to {new_first_name}")
     else:
         print(f"User {user_id} not found.")
 
-@user_cli.command("update-last-name", help="Updates a user's last name")
+@user_cli.command("update-lastname", help="Updates a user's last name")
 @click.argument("user_id")
 @click.argument("new_last_name")
 def update_last_name_command(user_id, new_last_name):
-    user = update_user(user_id, last_name=new_last_name)
+    user = update_lastname(user_id, new_last_name)
     if user:
         print(f"User {user_id} last name updated to {new_last_name}")
     else:
@@ -144,7 +143,7 @@ def update_last_name_command(user_id, new_last_name):
 @click.argument("user_id")
 @click.argument("new_password")
 def update_password_command(user_id, new_password):
-    user = update_user(user_id, password=new_password)
+    user = update_password(user_id, new_password)
     if user:
         print(f"User {user_id} password updated.")
     else:
@@ -163,6 +162,7 @@ def delete_user_command(user_id):
     else:
         print(f"User {user_id} not found.")
 
+app.cli.add_command(user_cli) # add the group to the cli
 
 '''
 Test Commands

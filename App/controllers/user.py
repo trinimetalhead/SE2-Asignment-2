@@ -60,14 +60,42 @@ def get_all_staff():
     return get_user_by_role('staff')
 
 #UPDATE 
-def update_user(id, **kwargs):
+def update_username(id,newUsername):
     user = get_user(id)
     if user:
-        user.update_username = kwargs
+        user.update_username(newUsername)
         # user is already in the session; no need to re-add
         db.session.commit()
         return True
-    return None
+    else:
+        return print(f"User with ID {id} not found!")
+    
+def update_fristname(id,newFirstName):
+    user = get_user(id)
+    if user:
+        user.update_first_name(newFirstName)
+        db.session.commit()
+        return True
+    else:
+        return print(f"No user with ID {id} found!")
+
+def update_lastname(id,newLastName):
+    user = get_user(id)
+    if user:
+        user.update_lastname(newLastName)
+        db.session.commit()
+        return True
+    else:
+        return print(f"No user with ID {id} found!")
+    
+def update_password(id,newPassword):
+    user=get_user(id)
+    if user:
+        user.update_password(newPassword)
+        db.session.commit()
+        return True
+    else:
+        return print(f"No user with ID {id} found!")
 
 #DELETE
 def delete_user(id):
