@@ -27,14 +27,14 @@ def update_position_title(position_id,title):
     position = get_position_id(position_id)
     if position:
         position.update_title(title)
-        return position.__repr__()
+        return print(f"Position {position_id} title update {title}")
     return print(f"Position Not Found with id {position_id}")
 
 def update_position_description(position_id,description):
     position = get_position_id(position_id)
     if position:
         position.update_description(description)
-        return position.__repr__()
+        return print(f"Position {position_id} {position.title} description updated to {description}")
     return print(f"Position Not Found with id {position_id}")
 
 def update_position_requirements(position_id,requirements):

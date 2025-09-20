@@ -107,6 +107,7 @@ def list_students_command():
     for user in students:
         print(f"ID: {user.id}, Username: {user.username}, Name: {user.first_name} {user.last_name}, Major: {user.major}")
 
+
 #UPDATE
 
 @user_cli.command("update-username", help="Updates a user's username")
@@ -210,32 +211,25 @@ def list_positions(employer_id):
     for position in positions:
         print(f"ID: {position.id}, Title: {position.title}, Description: {position.description}, Requirements: {position.requirements}")
 
-@employer_cli.command("list-positions-employer", help="Lists all internship positions by employer")
-@click.argument("employer_id")
-def list_positions_by_employer(employer_id):
-    positions = get_positions_by_employer(employer_id)
-    if not positions:
-        print("No positions found for this employer.")
-        return
-    for position in positions:
-        print(f"ID: {position.id}, Title: {position.title}, Description: {position.description}, Requirements: {position.requirements}")
 
 @employer_cli.command("view-shortlists", help="View all shortlists for a position")
 @click.argument("position_id")
 def view_shortlists_command(position_id):
+    position = get_position_id(position_id)
     shortlists = get_shortlists_position(position_id)
     if not shortlists:
-        print(f"No students shortlisted for position {position_id}.")
+        print(f"No students shortlisted for position {position_id} {position.title}.")
         return
     position = get_position_id(position_id)
     print(f"Shortlists for {position_id} {position.title}:")
     for shortlist in shortlists:
+        staff = get_user(shortlist.staff_id)
         student = get_user(shortlist.student_id)
-        print(f"Shortlist ID: {shortlist.id}, Student: {shortlist.student_id} {student.first_name}_{student.last_name}, Status: {shortlist.status}, Date Added: {shortlist.date_added}")
+        print(f"Shortlist ID: {shortlist.id}, Student: {shortlist.student_id} {student.first_name}_{student.last_name}, Status: {shortlist.status}, Date Added: {shortlist.date_added} by {staff.id} {staff.first_name}_{staff.last_name}")
 
 #UPDATE
 
-#update position not working
+#update position not working (testing with kwargs)
 @employer_cli.command("update-position", help="Updates an internship position")
 @click.argument("position_id")
 @click.argument("field")
@@ -247,25 +241,28 @@ def update_position(position_id, field, value):
     else: 
         print(f"Position {position_id} not found.")
 
+
+
 @employer_cli.command("update-title", help="Updates an internship position title")
 @click.argument("position_id")
 @click.argument("title")
-def update_position_title(position_id, title):
+@click.argument("employer_id")
+def update_title(employer_id,position_id, title):
+    employers = [user for user in get_all_users() if user.role == 'employer']
+    if not employers:
+        print("No employer users found.")
     result = update_position_title(position_id, title)
-    if result:
-        print(f"Position {position_id} updated: {result}")
-    else: 
-        print(f"Position {position_id} not found.")
+    return result
+    #if result:
+    #    return print(f"Position {position_id} updated: {result}")
+    
+    
 
 @employer_cli.command("update-description", help="Updates an internship position description")
 @click.argument("position_id") 
 @click.argument("description")
-def update_position_description(position_id, description):
-    result = update_position_description(position_id, description)
-    if result:
-        print(f"Position {position_id} updated: {result}")
-    else: 
-        print(f"Position {position_id} not found.")
+def update_description(position_id, description):
+    return update_position_description(position_id, description)
 
 @employer_cli.command("update-requirements", help="Updates an internship position requirements")
 @click.argument("position_id") 

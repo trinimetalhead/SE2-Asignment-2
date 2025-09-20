@@ -52,7 +52,7 @@ def get_user_by_role(role):
 
 def get_all_students():
     return get_user_by_role('student')
-
+            
 def get_all_employers():
     return get_user_by_role('employer')
 
