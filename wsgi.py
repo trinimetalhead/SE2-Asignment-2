@@ -246,16 +246,10 @@ def update_position(position_id, field, value):
 @employer_cli.command("update-title", help="Updates an internship position title")
 @click.argument("position_id")
 @click.argument("title")
-@click.argument("employer_id")
-def update_title(employer_id,position_id, title):
-    employers = [user for user in get_all_users() if user.role == 'employer']
-    if not employers:
-        print("No employer users found.")
+
+def update_title(position_id, title):
     result = update_position_title(position_id, title)
-    return result
-    #if result:
-    #    return print(f"Position {position_id} updated: {result}")
-    
+    return result    
     
 
 @employer_cli.command("update-description", help="Updates an internship position description")
