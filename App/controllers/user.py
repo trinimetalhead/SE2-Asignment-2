@@ -59,6 +59,25 @@ def get_all_employers():
 def get_all_staff():
     return get_user_by_role('staff')
 
+def check_user_role (id, requiredRole):
+    user = get_user(id)
+    if user and user.role == requiredRole:
+        return True
+    return False
+
+def get_user_role(id):
+    user = get_user(id)
+    return user.role if user else print(f"Error")
+
+def is_student(id):
+    return check_user_role(id, 'student') 
+
+def is_staff(id):
+    return check_user_role(id, 'staff')
+
+def is_employer(id):
+    return check_user_role(id,'employer')
+
 #UPDATE 
 def update_username(id,newUsername):
     user = get_user(id)

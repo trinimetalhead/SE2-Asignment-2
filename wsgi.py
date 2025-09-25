@@ -204,28 +204,34 @@ def create_position(employer_id, title, description, requirements):
 @employer_cli.command("list-positions", help="Lists all internship positions for an employer")
 @click.argument("employer_id")
 def list_positions(employer_id):
-    positions = get_positions_by_employer(employer_id)
-    if not positions:
-        print("No positions found for this employer.")
-        return
-    for position in positions:
-        print(f"ID: {position.id}, Title: {position.title}, Description: {position.description}, Requirements: {position.requirements}")
+    if is_employer(employer_id):
 
+        positions = get_positions_by_employer(employer_id)
+        if not positions:
+            print("No positions found for this employer.")
+            return
+        for position in positions:
+            print(f"ID: {position.id}, Title: {position.title}, Description: {position.description}, Requirements: {position.requirements}")
+    else: 
+        print(f"No employer found with ID {employer_id}")
 
 @employer_cli.command("view-shortlists", help="View all shortlists for a position")
+@click.argument("id")
 @click.argument("position_id")
-def view_shortlists_command(position_id):
-    position = get_position_id(position_id)
-    shortlists = get_shortlists_position(position_id)
-    if not shortlists:
-        print(f"No students shortlisted for position {position_id} {position.title}.")
-        return
-    position = get_position_id(position_id)
-    print(f"Shortlists for {position_id} {position.title}:")
-    for shortlist in shortlists:
-        staff = get_user(shortlist.staff_id)
-        student = get_user(shortlist.student_id)
-        print(f"Shortlist ID: {shortlist.id}, Student: {shortlist.student_id} {student.first_name}_{student.last_name}, Status: {shortlist.status}, Date Added: {shortlist.date_added} by {staff.id} {staff.first_name}_{staff.last_name}")
+def view_shortlists_command(id,position_id):
+    if is_employer(id):
+        position = get_position_id(position_id)
+        shortlists = get_shortlists_position(position_id)
+        if not shortlists:
+            print(f"No students shortlisted for position {position_id} {position.title}.")
+            return
+        position = get_position_id(position_id)
+        print(f"Shortlists for {position_id} {position.title}:")
+        for shortlist in shortlists:
+            staff = get_user(shortlist.staff_id)
+            student = get_user(shortlist.student_id)
+            print(f"Shortlist ID: {shortlist.id}, Student: {shortlist.student_id} {student.first_name}_{student.last_name}, Status: {shortlist.status}, Date Added: {shortlist.date_added} by {staff.id} {staff.first_name}_{staff.last_name}")
+    return print(f"No employer found with ID {id}")
 
 #UPDATE
 
@@ -244,67 +250,91 @@ def update_position(position_id, field, value):
 
 
 @employer_cli.command("update-title", help="Updates an internship position title")
+@click.argument("employer_id")
 @click.argument("position_id")
 @click.argument("title")
-
-def update_title(position_id, title):
-    result = update_position_title(position_id, title)
-    return result    
-    
+def update_title(employer_id, position_id, title):
+    user = get_user(employer_id)
+    if is_employer(employer_id):
+        result = update_position_title(position_id, title)
+        return result    
+    else:
+        return print(f"User with id {employer_id} does not have employer access")
 
 @employer_cli.command("update-description", help="Updates an internship position description")
+@click.argument("id")
 @click.argument("position_id") 
 @click.argument("description")
-def update_description(position_id, description):
-    return update_position_description(position_id, description)
-
+def update_description(id, position_id, description):
+    user = get_user(id)
+    if is_employer(id) == True:
+        return update_position_description(position_id, description)
+    else: 
+        return print(f"User with id {id} does not have employer access")
+    
 @employer_cli.command("update-requirements", help="Updates an internship position requirements")
+@click.argument("id")
 @click.argument("position_id") 
 @click.argument("requirements")
-def update_position_requirements(position_id, requirements):
-    result = update_position_requirements(position_id, requirements)
-    if result:
-        print(f"Position {position_id} updated: {result}")
-    else: 
-        print(f"Position {position_id} not found.")
+def update_position_requirements(id,position_id, requirements):
+    if is_employer(id):
+        result = update_position_requirements(position_id, requirements)
+        if result:
+            print(f"Position {position_id} updated: {result}")
+        else: 
+            print(f"Position {position_id} not found.")
+    return print(f"No employer found with ID {id}")
 
 @employer_cli.command("accept", help="Accept a student for a position")
+@click.argument("id")
 @click.argument("position_id")
 @click.argument("student_id")
-def accept_student_command(position_id, student_id):
-    shortlists = get_shortlists_position(position_id)
-    if not shortlists:
-        return print(f"No students shortlisted for position {position_id}.")
+def accept_student_command(id, position_id, student_id):
+    if is_employer(id):
+        shortlists = get_shortlists_position(position_id)
+        if not shortlists:
+            return print(f"No students shortlisted for position {position_id}.")
     
-    for shortlist in shortlists:
-        if shortlist.student_id == int(student_id):
-            shortlist.accept()
-            print(f"Student {student_id} accepted for position {position_id}.")
-            return
-    return print(f"Student {student_id} not found in shortlist for position {position_id}.")
+        for shortlist in shortlists:
+            if shortlist.student_id == int(student_id):
+                shortlist.accept()
+                print(f"Student {student_id} accepted for position {position_id}.")
+                return
+        return print(f"Student {student_id} not found in shortlist for position {position_id}.")
+    return print(f"No Employer found with ID {id}")
+
 
 @employer_cli.command("reject", help="Reject a student for a position")
+@click.argument("id")
 @click.argument("position_id")
 @click.argument("student_id")
-def reject_student_command(position_id, student_id):
-    shortlists = get_shortlists_position(position_id)
-    if not shortlists:
-        return print(f"No students shortlisted for position {position_id}.")
+def reject_student_command(id, position_id, student_id):
+    if is_employer(id):
+        shortlists = get_shortlists_position(position_id)
+        if not shortlists:
+            return print(f"No students shortlisted for position {position_id}.")
     
-    for shortlist in shortlists:
-        if shortlist.student_id == int(student_id):
-            shortlist.reject()
-            print(f"Student {student_id} rejected for position {position_id}.")
-            return
-    return print(f"Student {student_id} not found in shortlist for position {position_id}.")
+        for shortlist in shortlists:
+            if shortlist.student_id == int(student_id):
+                shortlist.reject()
+                print(f"Student {student_id} rejected for position {position_id}.")
+                return
+        return print(f"Student {student_id} not found in shortlist for position {position_id}.")
+    return print(f"No employer found with ID {id}")
 
 #DELETE
 
 @employer_cli.command("delete",help="Deletes an Internship Position")
+@click.argument("id")
 @click.argument("position_id")
-def delete_position_command(position_id):
-    delete_position(position_id)
-    print(f"Position {position_id} deleted.")
+def delete_position_command(id, position_id):
+    if is_employer(id):
+        if get_position_id(position_id) is not None:
+
+            delete_position(position_id)
+            return print(f"Position {position_id} deleted.")
+        return  print(f"No POSITION found with ID {position_id}")
+    return print(f"No EMPLOYER found with ID {id}")
 
 
 app.cli.add_command(employer_cli) # add the group to the cli
@@ -324,54 +354,67 @@ staff_cli = AppGroup('staff', help='staff commands')
 @click.argument("student_id")
 @click.argument("position_id")
 def add_to_shortlist_command(staff_id, student_id, position_id):
-    try:
-        shortlist = add_to_shortlist(staff_id, student_id, position_id)
-        print(f"Student {student_id} added to shortlist for position {position_id} by staff {staff_id}. Shortlist ID: {shortlist.id}")
-    except ValueError as e:
-        print(f"Error: {e}")
+    if is_staff(staff_id):
+        try:
+            shortlist = add_to_shortlist(staff_id, student_id, position_id)
+            print(f"Student {student_id} added to shortlist for position {position_id} by staff {staff_id}. Shortlist ID: {shortlist.id}")
+        except ValueError as e:
+            print(f"Error: {e}")
+    return print(f"No STAFF found with ID {staff_id}")
 
 #READ
 @staff_cli.command("view-positions", help="View all internship positions")
-def view_positions_command():
-    positions = internship_position.InternshipPosition.query.all()
-    if not positions:
-        print("No internship positions found.")
-        return
-    for position in positions:
-        employer = get_user(position.employer_id)
-        print(f"ID: {position.id}, Title: {position.title}, Description: {position.description}, Requirements: {position.requirements}, Employer: {employer.id} {employer.first_name} {employer.last_name}")
+@click.argument("id")
+def view_positions_command(id):
+    if is_staff(id):
+        positions = internship_position.InternshipPosition.query.all()
+        if not positions:
+            print("No internship positions found.")
+            return
+        for position in positions:
+            employer = get_user(position.employer_id)
+            print(f"ID: {position.id}, Title: {position.title}, Description: {position.description}, Requirements: {position.requirements}, Employer: {employer.id} {employer.first_name} {employer.last_name}")
+    return print(f"No STAFF with ID {id}")
 
 @staff_cli.command("list-shortlists", help="Lists all shortlists in the database")
-def list_shortlists_command():
-    shortlists = get_all_shortlists()
-    if not shortlists:
-        print("No shortlists found.")
-        return
-    for shortlist in shortlists:
-        position = get_position_id(shortlist.position_id)
-        student = get_user(shortlist.student_id)
-        staff = get_user(shortlist.staff_id) 
-        print(f"Shortlist ID: {shortlist.id}, Position: {position.title}, Student: {shortlist.student_id}  {student.first_name}_{student.last_name}, Status: {shortlist.status}, Shortlisted by Staff: {shortlist.staff_id} {staff.first_name}_{staff.last_name} on {shortlist.date_added}")
+@click.argument("id")
+def list_shortlists_command(id):
+    if is_staff(id):
+        shortlists = get_all_shortlists()
+        if not shortlists:
+            print("No shortlists found.")
+            return
+        for shortlist in shortlists:
+            position = get_position_id(shortlist.position_id)
+            student = get_user(shortlist.student_id)
+            staff = get_user(shortlist.staff_id) 
+            print(f"Shortlist ID: {shortlist.id}, Position: {position.title}, Student: {shortlist.student_id}  {student.first_name}_{student.last_name}, Status: {shortlist.status}, Shortlisted by Staff: {shortlist.staff_id} {staff.first_name}_{staff.last_name} on {shortlist.date_added}")
+    return print(f"No STAFF found with ID{id}")
 
 @staff_cli.command("shortlisted-students", help="Get all shortlisted students for a position")
+@click.argument("id")
 @click.argument("position_id")
-def get_shortlisted_students_command(position_id):
-    shortlists = get_shortlists_position(position_id)
-    if not shortlists:
-        print(f"No students shortlisted for position {position_id}.")
-        return
-    for shortlist in shortlists:
-        print(f"Shortlist ID: {shortlist.id}, Student ID: {shortlist.student_id}, Status: {shortlist.status}, Date Added: {shortlist.date_added}")
+def get_shortlisted_students_command(id,position_id):
+    if is_staff(id):
+        shortlists = get_shortlists_position(position_id)
+        if not shortlists:
+            print(f"No students shortlisted for position {position_id}.")
+            return
+        for shortlist in shortlists:
+            print(f"Shortlist ID: {shortlist.id}, Student ID: {shortlist.student_id}, Status: {shortlist.status}, Date Added: {shortlist.date_added}")
     
 #DELETE
 @staff_cli.command("delete", help="Deletes a shortlist entry")
+@click.argument("id")
 @click.argument("shortlist_id")
-def delete_shortlist_command(shortlist_id):
-    try:
-        delete_shortlist(shortlist_id)
-        print(f"Shortlist {shortlist_id} deleted.")
-    except ValueError as e:
-        print(f"Error: {e}")
+def delete_shortlist_command(id, shortlist_id):
+    if is_staff(id):
+        try:
+            delete_shortlist(shortlist_id)
+            print(f"Shortlist {shortlist_id} deleted.")
+        except ValueError as e:
+            print(f"Error: {e}")
+    return print(f"No STAFF found with ID {id}")
 
 app.cli.add_command(staff_cli) # add the group to the cli
 
@@ -385,13 +428,15 @@ student_cli = AppGroup('student', help='student commands')
 @student_cli.command("view-shortlists", help="View all shortlists for a student")
 @click.argument("student_id")
 def view_shortlists_command(student_id):
-    shortlists = get_shortlists_student(student_id)
-    if not shortlists:
-        print(f"No shortlists found for student {student_id}.")
-        return
-    for shortlist in shortlists:
-        position = get_position_id(shortlist.position_id)
-        print(f"Shortlist ID: {shortlist.id}, Position: {position.title}, Status: {shortlist.status}, Date Added: {shortlist.date_added}")
+    if is_student(student_id):
+        shortlists = get_shortlists_student(student_id)
+        if not shortlists:
+            print(f"No shortlists found for student {student_id}.")
+            return
+        for shortlist in shortlists:
+            position = get_position_id(shortlist.position_id)
+            print(f"Shortlist ID: {shortlist.id}, Position: {position.title}, Status: {shortlist.status}, Date Added: {shortlist.date_added}")
+    return print(f"No STUDENT found with ID {id}")
 
 
 app.cli.add_command(student_cli) # add the group to the cli
