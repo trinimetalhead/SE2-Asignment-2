@@ -124,7 +124,7 @@ def update_username_command(user_id, new_username):
 @click.argument("user_id") 
 @click.argument("new_first_name")
 def update_first_name_command(user_id, new_first_name):
-    user = update_fristname(user_id, new_first_name)
+    user = update_firstname(user_id, new_first_name)
     if user:
         print(f"User {user_id} first name updated to {new_first_name}")
     else:

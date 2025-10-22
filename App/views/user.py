@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from App.controllers import (
     create_student, create_staff, create_employer,
-    get_all_users_json, get_user, update_username, update_fristname,
+    get_all_users_json, get_user, update_username, update_firstname,
     update_lastname, update_password, delete_user
 )
 
@@ -42,7 +42,7 @@ def update_user_api(user_id):
     if 'username' in data:
         update_username(user_id, data['username'])
     if 'first_name' in data:
-        update_fristname(user_id, data['first_name'])
+        update_firstname(user_id, data['first_name'])
     if 'last_name' in data:
         update_lastname(user_id, data['last_name'])
     if 'password' in data:

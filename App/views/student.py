@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from App.controllers.user import (
-    create_student, get_all_students, get_user, update_username, update_fristname,
+    create_student, get_all_students, get_user, update_username, update_firstname,
     update_lastname, update_password, delete_user
 )
 
@@ -35,7 +35,7 @@ def update_student(student_id):
     if 'username' in data:
         update_username(student_id, data['username'])
     if 'first_name' in data:
-        update_fristname(student_id, data['first_name'])
+        update_firstname(student_id, data['first_name'])
     if 'last_name' in data:
         update_lastname(student_id, data['last_name'])
     if 'password' in data:

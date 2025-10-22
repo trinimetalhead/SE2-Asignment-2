@@ -10,6 +10,7 @@ def create_student(username, password, first_name, last_name, major='undeclared'
     student = Student(username, password, first_name, last_name, major)
     db.session.add(student)
     db.session.commit()
+    return student
 
 def create_staff(username, password, first_name, last_name, position='Staff Member'):
     if User.query.filter_by(username=username).first():
@@ -18,6 +19,7 @@ def create_staff(username, password, first_name, last_name, position='Staff Memb
     staff = Staff(username, password, first_name, last_name, position)
     db.session.add(staff)
     db.session.commit()
+    return staff
 
 def create_employer(username, password, first_name, last_name, company='Unknown Company'):
     if User.query.filter_by(username=username).first():
@@ -26,6 +28,7 @@ def create_employer(username, password, first_name, last_name, company='Unknown 
     employer = Employer(username, password, first_name, last_name, company)
     db.session.add(employer)
     db.session.commit()
+    return employer
 
 
 #READ
@@ -89,15 +92,16 @@ def update_username(id,newUsername):
     else:
         return print(f"User with ID {id} not found!")
     
-def update_fristname(id,newFirstName):
+def update_firstname(id,newFirstName):
     user = get_user(id)
     if user:
-        user.update_first_name(newFirstName)
+        # Fix: Change update_first_name to update_firstname
+        user.update_firstname(newFirstName)
         db.session.commit()
         return True
     else:
         return print(f"No user with ID {id} found!")
-
+    
 def update_lastname(id,newLastName):
     user = get_user(id)
     if user:
@@ -115,6 +119,24 @@ def update_password(id,newPassword):
         return True
     else:
         return print(f"No user with ID {id} found!")
+
+# Combined update function
+def update_user(id, username=None, password=None, first_name=None, last_name=None):
+    user = get_user(id)
+    if not user:
+        return False
+    
+    if username:
+        user.update_username(username)
+    if password:
+        user.update_password(password)
+    if first_name:
+        user.update_first_name(first_name)
+    if last_name:
+        user.update_lastname(last_name)
+    
+    db.session.commit()
+    return True
 
 #DELETE
 def delete_user(id):
