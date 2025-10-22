@@ -60,22 +60,18 @@ class User(db.Model):
 #UPDATE
     def update_username(self, new_username):
         self.username = new_username
-        db.session.commit()
         return True
-    
+
     def update_firstname(self, new_first_name):
         self.first_name = new_first_name
-        db.session.commit()
         return True
-    
+
     def update_lastname(self, new_last_name):
         self.last_name = new_last_name
-        db.session.commit()
         return True
-    
+
     def update_password(self, new_password):
         self.set_password(new_password)
-        db.session.commit()
         return True
 
 
