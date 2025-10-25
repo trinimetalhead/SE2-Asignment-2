@@ -36,7 +36,7 @@
  **Success Criteria:**  
 - System updates student’s application status correctly
 
-## 2.1 Staff Functions
+## 2 Staff Functions
 
 ### Test Case: Select Internship Position
 **Steps:**
@@ -109,8 +109,7 @@
 **Success Criteria:**
 - System updates offer to rejected
 
-jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj
-## 1. Unauthorized Access
+## 4. Unauthorized Access
 
 ### Test Case: Users who are not logged in
 **Steps:**
